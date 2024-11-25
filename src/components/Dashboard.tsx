@@ -1,60 +1,107 @@
-import React from 'react'
-import Sidebar from './Ui_generator/Sidebar/Sidebar'
-import { Tasks,Task } from './Ui_generator/Sidebar/data';
+// Dashboard.tsx
+import React, { useRef } from 'react';
+import {
+  DndContext,
+  useSensor,
+  useSensors,
+  DragStartEvent,
+  DragEndEvent,
+  PointerSensor,
+} from '@dnd-kit/core';
+import Sidebar from './Ui_generator/Sidebar/Sidebar';
 import MainWorkPlace from './Ui_generator/Workplace/MainWorkPlace';
-import { DragEndEvent,DndContext } from '@dnd-kit/core';
+import { Tasks, Task } from './Ui_generator/Sidebar/data';
+
+type Column = {
+  id: string;
+  url: string;
+};
+
 function Dashboard() {
   const [tasks, setTasks] = React.useState<Task[]>(Tasks);
-console.log(tasks);
+  const activeTaskId = useRef<string | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  type column={
-    id:string,
-    url:string,
-  }
-  
-  const columns:column[]=[
-    {id:"exporter",
-      url:"<></>"
-    },
-    {id:"color-shade-generator",
-      url:"<></>"
-    },
-  ]
-   function handleDrag(event: DragEndEvent){
-		const {active,over, delta}= event;
-		if(!over){
-			return;
-		}
-//console.log(active,over);
+  const sensors = useSensors(useSensor(PointerSensor));
 
-		const taskId= active.id as string;
-		const newColumn = over.id as string;
-    const task = tasks.find(task=> String(task.id)===String(taskId));
-    const newx = task ? task.x + delta?.x : 0;
-    const newy= task?task.y+delta.y:0;
-    // //console.log(task ? task.x + delta?.x : 0);
-    
-    // //console.log(newx,newy,delta.x,delta.y,"newx,newy");
-		setTasks(()=>{return tasks.map(task=>{
-      // //console.log(task.id,taskId, String(task.id)===taskId);
-      return String(task.id)===String(taskId)?{...task,column:newColumn,x:newx,y:newy}:task})})
-	}
+  // Handle drag start to track the active task ID
+  const handleDragStart = (event: DragStartEvent) => {
+    activeTaskId.current = event.active.id as string;
+  };
+
+  // Handle drag end to update the task's position
+  const handleDragEnd = (event: DragEndEvent) => {
+    if (activeTaskId.current && containerRef.current) {
+      const taskId = activeTaskId.current;
+      const containerRect = containerRef.current.getBoundingClientRect();
+
+      const activeRect = event.active.rect.current.translated;
+
+      if (activeRect) {
+        // Calculate the new position relative to the container
+        const newX = activeRect.left - containerRect.left;
+        const newY = activeRect.top - containerRect.top;
+
+        // Update the task's position and column
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            String(task.id) === String(taskId)
+              ? { ...task, x: newX, y: newY, column: 'color-shade-generator' }
+              : task
+          )
+        );
+      }
+    }
+
+    // Reset the active task ID
+    activeTaskId.current = null;
+  };
+
+  const columns: Column[] = [
+    {
+      id: 'exporter',
+      url: '<></>',
+    },
+    {
+      id: 'color-shade-generator',
+      url: '<></>',
+    },
+  ];
+
   return (
-    <DndContext onDragEnd={handleDrag}>
-    <div className='grid grid-cols-12 gap-4 h-screen'> {/* Adjust the number of cols as needed */}
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
+    >
+      <div className="grid grid-cols-12 gap-4 h-screen">
         {columns.map((column) => {
-          return (column.id === "exporter") ? 
-          (
-          <div className='col-span-3'>
-            <Sidebar tasks={tasks.filter((task)=>task.column==="exporter")} column={column}/>
-        </div>):
-        <div className='col-span-9 w-full h-full border-black border-2'>
-                        <MainWorkPlace tasks={tasks.filter((task)=>task.column==="color-shade-generator")} column={column} />
-                    </div>
+          return column.id === 'exporter' ? (
+            <div className="col-span-3" key={column.id}>
+              <Sidebar
+                tasks={tasks.filter((task) => task.column === 'exporter')}
+                column={column}
+              />
+            </div>
+          ) : (
+            <div
+              className="col-span-9 w-full h-full border-black border-2"
+              key={column.id}
+              ref={containerRef}
+              style={{ position: 'relative' }} // Ensure the container is positioned relative
+            >
+              <MainWorkPlace
+                tasks={tasks.filter(
+                  (task) => task.column === 'color-shade-generator'
+                )}
+                column={column}
+              />
+            </div>
+          );
         })}
-    </div>
-</DndContext>
-  )
+      </div>
+    </DndContext>
+  );
 }
 
-export default Dashboard
+export default Dashboard;
