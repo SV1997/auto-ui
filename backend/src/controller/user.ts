@@ -1,7 +1,6 @@
 import {Request, Response} from 'express';
 import { user,workshop,components, PrismaClient  } from '@prisma/client';
-import { log } from 'console';
-import multer from 'multer';
+const jwt = require('jsonwebtoken');
 import express from 'express';
 declare module 'express-session' {
     interface SessionData {
@@ -14,7 +13,7 @@ const createUser:express.RequestHandler=async (req:Request, res:Response)=>{
 try
     {const userData=req.body;
         console.log(userData);
-        
+        const email= userData.email;
 const isPresent=await prisma.user.findFirst({
     where: {
         email: userData.email as string
@@ -32,7 +31,8 @@ const response = await prisma.user.create({
 })
 console.log(response);
 req.session.userId=Number(response.id);
-res.cookie('userId', response.id);
+const token= jwt.sign({email}, 'svautoui')
+res.cookie('token', token,{httpOnly:true,secure:true, sameSite:'none'});
 res.json({message: 'User created successfully'});
 }
 catch(err){
@@ -152,6 +152,8 @@ const getUserData:express.RequestHandler=async (req:Request, res:Response)=>{
     console.log(userId);
     req.session.userId=Number(userId);
     req.session.save()
+    const token= jwt.sign({userMail}, 'svautoui')
+    res.cookie('token', token,{httpOnly:true,secure:true, sameSite:'none'});
     res.json({msg: "user found", userId: userId});}
     catch(err){
         console.log(err);

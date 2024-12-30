@@ -10,11 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
+const jwt = require('jsonwebtoken');
 const prisma = new client_1.PrismaClient();
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = req.body;
         console.log(userData);
+        const email = userData.email;
         const isPresent = yield prisma.user.findFirst({
             where: {
                 email: userData.email
@@ -32,7 +34,8 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
         console.log(response);
         req.session.userId = Number(response.id);
-        res.cookie('userId', response.id);
+        const token = jwt.sign({ email }, 'svautoui');
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
         res.json({ message: 'User created successfully' });
     }
     catch (err) {
@@ -135,6 +138,8 @@ const getUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         console.log(userId);
         req.session.userId = Number(userId);
         req.session.save();
+        const token = jwt.sign({ userMail }, 'svautoui');
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
         res.json({ msg: "user found", userId: userId });
     }
     catch (err) {

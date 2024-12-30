@@ -7,8 +7,8 @@ import userRoutes from "./routes/userRoute";
 import fileRoutes from "./routes/fileRoute";
 import * as dotenv from 'dotenv';
 import { Request, Response, NextFunction } from "express";
-import cookieParser from "cookie-parser";
-import multer = require("multer");
+const cookieParser =require( "cookie-parser")
+import { Jwt } from "jsonwebtoken";
 dotenv.config();
 const RedisStore = connectRedis(session);
 const redisClient = createClient({
@@ -19,7 +19,6 @@ const redisClient = createClient({
     port: Number(process.env.REDIS_PORT),
   },
 });
-
 (async () => {
   try {
     await redisClient.connect();
@@ -31,6 +30,7 @@ const redisClient = createClient({
 })();
 
 const app = express();
+app.use(cookieParser())
 app.use(express.json());
 
 const store = new RedisStore({ client: redisClient as any });

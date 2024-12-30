@@ -53,7 +53,7 @@ const redis_1 = require("redis");
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 const fileRoute_1 = __importDefault(require("./routes/fileRoute"));
 const dotenv = __importStar(require("dotenv"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cookieParser = require("cookie-parser");
 dotenv.config();
 const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
 const redisClient = (0, redis_1.createClient)({
@@ -75,9 +75,10 @@ const redisClient = (0, redis_1.createClient)({
     }
 }))();
 const app = (0, express_1.default)();
+app.use(cookieParser());
 app.use(express_1.default.json());
 const store = new RedisStore({ client: redisClient });
-app.use((0, cookie_parser_1.default)());
+app.use(cookieParser());
 app.use((0, express_session_1.default)({
     secret: 'my secret',
     resave: false,
