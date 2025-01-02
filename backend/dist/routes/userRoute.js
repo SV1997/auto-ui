@@ -13,4 +13,6 @@ userRoutes.post("/getuserdata", user_1.default.getUserData);
 userRoutes.post("/createworkshop", jwt_1.default, user_1.default.createWorkshop);
 userRoutes.post("/getworkshops", jwt_1.default, user_1.default.sendWorkshopsData);
 userRoutes.post("/getelements", jwt_1.default, user_1.default.sendCodesData);
+userRoutes.post("/delete", jwt_1.default, user_1.default.deleteElement);
+userRoutes.post("/logout", jwt_1.default, user_1.default.logout);
 exports.default = userRoutes;

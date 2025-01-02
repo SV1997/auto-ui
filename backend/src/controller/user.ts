@@ -186,7 +186,46 @@ try{    const workshopId:String=req.body.workshopId;
         res.json({message: 'Error in fetching user'});
     }
 }
+const logout:express.RequestHandler=async (req:Request, res:Response)=>{
+    try{
+        console.log("logout")
+        
+        res.clearCookie('token');
+        req.session.destroy((err)=>{
+            if(err){
+                console.log(err);
+                res.json({message: 'Error in logging out'});
+                return;
+        }
+    })
+        res.json({message: 'Logged out successfully'});
+    }
+    catch(err){
+        console.log(err);
+        res.json({message: 'Error in logging out'});
+    }
+}
 
-const userFunctions={saveCode, createUser, createWorkshop, getUserData, sendWorkshopsData, sendCodesData};
+const deleteElement:express.RequestHandler=async (req:Request, res:Response)=>{
+    try {
+        const workshopId=req.body.workshopId;
+        const elementId=req.body.elementId;
+        console.log(workshopId, elementId);
+        
+        const response=await prisma.components.delete({
+            where:{
+                workshopId: Number(workshopId),
+                id: Number(elementId)
+            }
+        })
+        console.log(response);
+        res.json({message: 'Element deleted successfully'});
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+const userFunctions={saveCode, createUser, createWorkshop, getUserData, sendWorkshopsData, sendCodesData, logout, deleteElement};
 
 export default userFunctions;

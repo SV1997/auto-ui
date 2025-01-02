@@ -9,4 +9,6 @@ userRoutes.post("/getuserdata",user.getUserData);
 userRoutes.post("/createworkshop",verifyToken,user.createWorkshop);
 userRoutes.post("/getworkshops",verifyToken,user.sendWorkshopsData);
 userRoutes.post("/getelements",verifyToken,user.sendCodesData);
+userRoutes.post("/delete",verifyToken,user.deleteElement);
+userRoutes.post("/logout",verifyToken,user.logout);
 export default userRoutes;

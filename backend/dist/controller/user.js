@@ -172,5 +172,41 @@ const sendCodesData = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json({ message: 'Error in fetching user' });
     }
 });
-const userFunctions = { saveCode, createUser, createWorkshop, getUserData, sendWorkshopsData, sendCodesData };
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("logout");
+        res.clearCookie('token');
+        req.session.destroy((err) => {
+            if (err) {
+                console.log(err);
+                res.json({ message: 'Error in logging out' });
+                return;
+            }
+        });
+        res.json({ message: 'Logged out successfully' });
+    }
+    catch (err) {
+        console.log(err);
+        res.json({ message: 'Error in logging out' });
+    }
+});
+const deleteElement = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const workshopId = req.body.workshopId;
+        const elementId = req.body.elementId;
+        console.log(workshopId, elementId);
+        const response = yield prisma.components.delete({
+            where: {
+                workshopId: Number(workshopId),
+                id: Number(elementId)
+            }
+        });
+        console.log(response);
+        res.json({ message: 'Element deleted successfully' });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+const userFunctions = { saveCode, createUser, createWorkshop, getUserData, sendWorkshopsData, sendCodesData, logout, deleteElement };
 exports.default = userFunctions;
