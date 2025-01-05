@@ -1,0 +1,3 @@
+{
+    "Button":"import React from 'react';\ninterface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n    children: React.ReactNode;\n    type?: \"button\" | \"submit\" | \"reset\";\n    bgColor?: string;\n    textColor?: string;\n    className?: string;\n}\n\nexport default function Button({\n    children,\n    type = \"button\",\n    bgColor = \"bg-blue-600\",\n    textColor = \"text-white\",\n    className = \"\",\n    onClick=()=>{},\n    ...props\n}: ButtonProps) {\n    return (\n        <button type={type} className={`px-4 py-2 rounded-lg ${bgColor} ${textColor} ${className} w-full h-full relative `} onClick={onClick} >\n            {!children?\"button\":children}\n        </button>\n    );\n}\n"
+}
