@@ -128,6 +128,7 @@ const saveCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const getUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userMail = req.body.email;
+        const rememberMe = req.body.rememberMe;
         console.log(userMail);
         const response = yield prisma.user.findFirst({
             where: {
@@ -138,7 +139,7 @@ const getUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         console.log(userId);
         req.session.userId = Number(userId);
         req.session.save();
-        const token = jwt.sign({ userMail }, 'svautoui');
+        const token = jwt.sign({ userMail }, 'svautoui', { expiresIn: rememberMe ? '7d' : '1d' });
         res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
         res.json({ msg: "user found", userId: userId });
     }
