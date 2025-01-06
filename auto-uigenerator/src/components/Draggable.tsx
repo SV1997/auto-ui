@@ -6,10 +6,9 @@ import { Task } from './Ui_generator/Sidebar/data';
 interface DraggableProps {
   id: string;                
   children: React.ReactNode;
-    setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const Draggable: React.FC<DraggableProps> = ({ id, children, setTasks }) => {
+const Draggable: React.FC<DraggableProps> = ({ id, children }) => {
   const {
     attributes,     
     listeners,      

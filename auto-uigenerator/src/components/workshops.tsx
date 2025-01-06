@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { cleanArray } from '../store/elementsSlice';
 import axios from 'axios';
 interface Workshop {
@@ -15,8 +15,7 @@ const Workshops: React.FC = () => {
   const dispatch=useDispatch();
   dispatch(cleanArray())
   const [workshops, setWorkshops] = useState<Workshop[]>([]);
-  const sidebarItems:String[] = [
-  ];
+
   useEffect(() => {
     const workshopList=async()=>{
       const response= await axios.post(`${domain}/api/v1/code/getworkshops`,{},{

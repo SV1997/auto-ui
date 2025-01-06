@@ -6,7 +6,6 @@ import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login as authLogin } from "../store/authSlice";
 import { useForm } from "react-hook-form"
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider()

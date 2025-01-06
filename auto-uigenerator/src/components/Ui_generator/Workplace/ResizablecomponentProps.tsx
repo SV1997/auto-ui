@@ -1,4 +1,5 @@
 // src/components/ResizableComponent.tsx
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { Rnd } from 'react-rnd';
 import { Task } from '../Sidebar/data';
