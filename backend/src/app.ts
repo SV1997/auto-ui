@@ -47,10 +47,10 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
 }));
-app.options('https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app', cors());  // Include before your other routes
+app.options('https://auto-rghs035mh-saharsh-vahsishthas-projects.vercel.app/login', cors());  // Include before your other routes
 
 app.use(cors({
-  origin: 'https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app', // This should be the URL of your frontend
+  origin: 'https://auto-rghs035mh-saharsh-vahsishthas-projects.vercel.app/login', // This should be the URL of your frontend
   credentials: true, // To allow cookies to be shared between backend and frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowable methods
   allowedHeaders: ['Content-Type', 'Authorization', 'WithCredentials'],
