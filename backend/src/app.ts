@@ -47,13 +47,29 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
 }));
+app.options('https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app', cors());  // Include before your other routes
 
 app.use(cors({
-  origin: 'https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization','WithCredentials'],
+  origin: 'https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app', // This should be the URL of your frontend
+  credentials: true, // To allow cookies to be shared between backend and frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowable methods
+  allowedHeaders: ['Content-Type', 'Authorization', 'WithCredentials'],
+  preflightContinue: true, // To respond to preflight requests
 }));
+// app.use('*',(req:Request, res:Response, next:NextFunction) => {
+//   res.header('Access-Control-Allow-Origin', 'https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app');
+//   res.header('Access-Control-Allow-Credentials', 'true');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//   if (req.method === 'OPTIONS') {
+//       return res.sendStatus(200); // To respond to preflight requests
+//   }
+//   next();
+// });
+app.use((req:Request, res:Response, next:NextFunction) => {
+  console.log('Received request from:', req.headers.origin);
+  next();
+});
 interface CustomError extends Error {
   status?: number;
 }

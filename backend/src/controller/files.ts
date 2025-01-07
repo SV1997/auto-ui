@@ -16,7 +16,7 @@ declare module 'express-session' {
     }
   }
   
-const fileDownload: RequestHandler = async (req: Request, res: Response) => {
+const fileDownload = async (req: Request, res: Response) => {
     try {
         const workspaceId= req.body.workspaceId;
         const fileContent= req.body.code;

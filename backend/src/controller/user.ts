@@ -9,7 +9,7 @@ declare module 'express-session' {
   }
   
 const prisma= new PrismaClient();
-const createUser:express.RequestHandler=async (req:Request, res:Response)=>{
+const createUser=async (req:Request, res:Response)=>{
 try
     {const userData=req.body;
         console.log(userData);
@@ -41,7 +41,7 @@ catch(err){
 }
 }
 
-const sendWorkshopsData:express.RequestHandler=async (req:Request, res:Response)=>{
+const sendWorkshopsData=async (req:Request, res:Response)=>{
    try{ console.log("workshop data");
     console.log(req.session, req.cookies);
     const user=req.session.userId;
@@ -64,7 +64,7 @@ const sendWorkshopsData:express.RequestHandler=async (req:Request, res:Response)
 }
 
 
-const createWorkshop:express.RequestHandler=async (req:Request, res:Response)=>{
+const createWorkshop=async (req:Request, res:Response)=>{
 try
 {const workshopData=req.body;
     const name=workshopData.name;
@@ -97,7 +97,7 @@ type elementInterface={
 	width?:number;
 	height?:number;
 }
-const saveCode:express.RequestHandler=async (req:Request, res:Response)=>{
+const saveCode=async (req:Request, res:Response)=>{
 try
     {const codeData=req.body.elements;
         const workshopId=req.body.workShopId;
@@ -139,7 +139,7 @@ catch(err){
 }
 }
 
-const getUserData:express.RequestHandler=async (req:Request, res:Response)=>{
+const getUserData=async (req:Request, res:Response)=>{
     try {const userMail= req.body.email;
         const rememberMe=req.body.rememberMe;
     console.log(userMail);
@@ -162,7 +162,7 @@ const getUserData:express.RequestHandler=async (req:Request, res:Response)=>{
     }
 }
 
-const sendCodesData:express.RequestHandler=async (req:Request, res:Response)=>{
+const sendCodesData=async (req:Request, res:Response)=>{
 try{    const workshopId:String=req.body.workshopId;
     const userId:Number|undefined=req.session.userId;
     if(userId!==req.session.userId){
@@ -187,7 +187,7 @@ try{    const workshopId:String=req.body.workshopId;
         res.json({message: 'Error in fetching user'});
     }
 }
-const logout:express.RequestHandler=async (req:Request, res:Response)=>{
+const logout=async (req:Request, res:Response)=>{
     try{
         console.log("logout")
         
@@ -207,7 +207,7 @@ const logout:express.RequestHandler=async (req:Request, res:Response)=>{
     }
 }
 
-const deleteElement:express.RequestHandler=async (req:Request, res:Response)=>{
+const deleteElement=async (req:Request, res:Response)=>{
     try {
         const workshopId=req.body.workshopId;
         const elementId=req.body.elementId;
