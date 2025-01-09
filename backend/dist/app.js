@@ -90,12 +90,28 @@ app.use((0, express_session_1.default)({
         maxAge: 1000 * 60 * 60 * 24, // 1 day
     }
 }));
+app.options('https://auto-ui-olive.vercel.app', (0, cors_1.default)()); // Include before your other routes
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: 'https://auto-ui-olive.vercel.app', // This should be the URL of your frontend
+    credentials: true, // To allow cookies to be shared between backend and frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowable methods
     allowedHeaders: ['Content-Type', 'Authorization', 'WithCredentials'],
+    preflightContinue: true, // To respond to preflight requests
 }));
+// app.use('*',(req:Request, res:Response, next:NextFunction) => {
+//   res.header('Access-Control-Allow-Origin', 'https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app');
+//   res.header('Access-Control-Allow-Credentials', 'true');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//   if (req.method === 'OPTIONS') {
+//       return res.sendStatus(200); // To respond to preflight requests
+//   }
+//   next();
+// });
+app.use((req, res, next) => {
+    console.log('Received request from:', req.headers.origin);
+    next();
+});
 app.use('/api/v1/code', userRoute_1.default);
 app.use('/api/v1/file', fileRoute_1.default);
 app.use((err, req, res, next) => {
