@@ -83,10 +83,11 @@ app.use((0, express_session_1.default)({
     secret: 'my secret',
     resave: false,
     saveUninitialized: false,
-    store: store,
+    store: store, // Ensure 'store' is properly configured for production
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Set to true in production
-        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // true in production (requires HTTPS)
+        httpOnly: true, // Mitigates XSS attacks
+        sameSite: 'lax', // Allows cross-site cookies in production
         maxAge: 1000 * 60 * 60 * 24, // 1 day
     }
 }));
@@ -95,8 +96,8 @@ app.use((0, cors_1.default)({
     origin: 'https://auto-ui-olive.vercel.app', // This should be the URL of your frontend
     credentials: true, // To allow cookies to be shared between backend and frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowable methods
-    allowedHeaders: ['Content-Type', 'Authorization', 'WithCredentials'],
-    preflightContinue: true, // To respond to preflight requests
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    // preflightContinue: true, // To respond to preflight requests
 }));
 // app.use('*',(req:Request, res:Response, next:NextFunction) => {
 //   res.header('Access-Control-Allow-Origin', 'https://auto-obuoqildg-saharsh-vahsishthas-projects.vercel.app');
