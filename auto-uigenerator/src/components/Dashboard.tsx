@@ -14,7 +14,7 @@ import { Tasks, Task } from './Ui_generator/Sidebar/data';
 import Button from './Ui_generator/Sidebar/button';
 import { generateTsxCode } from './generateTsxCode';
 import axios from 'axios';
-import { setInitialElements, updateInitialElements, firstelement } from '../store/elementsSlice';
+import { setInitialElements, firstelement } from '../store/elementsSlice';
 import { useSelector,useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import DroppableContainer from './DroppableContainer';
