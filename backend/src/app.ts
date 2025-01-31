@@ -48,10 +48,10 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
 }));
-app.options('https://auto-ui-olive.vercel.app', cors());  // Include before your other routes
+app.options('http:localhost:5173', cors());  // Include before your other routes
 
 app.use(cors({
-  origin: 'https://auto-ui-olive.vercel.app', // This should be the URL of your frontend
+  origin: 'http://localhost:5173/', // This should be the URL of your frontend
   credentials: true, // To allow cookies to be shared between backend and frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowable methods
   allowedHeaders: ['Content-Type', 'Authorization'],
